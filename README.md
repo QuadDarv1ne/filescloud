@@ -2,6 +2,10 @@
 
 `FilesCloud` — это веб-приложение для загрузки, хранения и скачивания файлов.
 
+![login](img/login.png)
+
+![registration](img/registration.png)
+
 ## Функции
 
 - Регистрация и вход пользователей
@@ -63,9 +67,24 @@ filescloud/
 │
 ├── templates/
 │   ├── base.html
-│   ├── index.html
-│   ├── login.html
-│   └── register.html
+│   ├── main/
+│   │   ├── index.html
+│   │   ├── trash.html
+│   │   └── share.html
+│   │
+│   ├── auth/
+│   │   ├── login.html
+│   │   └── register.html
+│   │
+│   ├── admin/
+│   │   └── dashboard.html
+│   │
+│   └── errors/
+│       ├── 401.html
+│       ├── 403.html
+│       ├── 404.html
+│       ├── 413.html
+│       └── 500.html
 │
 ├── static/
 │   ├── css/

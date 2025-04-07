@@ -1,0 +1,112 @@
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --border-radius: 0.375rem;
+    --transition-speed: 0.3s;
+}
+
+/* Общие стили */
+body {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+/* Навигация */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Карточки */
+.card {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    transition: transform var(--transition-speed);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Список файлов */
+.file-item {
+    transition: background-color var(--transition-speed);
+}
+
+.file-item:hover {
+    background-color: rgba(var(--primary-color), 0.05);
+}
+
+.file-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: var(--secondary-color);
+}
+
+/* Кнопки */
+.btn {
+    transition: all var(--transition-speed);
+    border-radius: var(--border-radius);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Формы */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Модальные окна */
+.modal-content {
+    border: none;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,0.2);
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    body[data-bs-theme="dark"] {
+        background-color: var(--dark-color);
+        color: var(--light-color);
+    }
+    
+    .card {
+        background-color: #2d3339;
+    }
+    
+    .list-group-item {
+        background-color: #2d3339;
+        color: var(--light-color);
+    }
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+    
+    .file-actions {
+        margin-top: 0.5rem;
+    }
+}

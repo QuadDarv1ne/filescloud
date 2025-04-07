@@ -1,42 +1,57 @@
-from flask import Flask, request
+import os
+import logging
+from pathlib import Path
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from flask_babel import Babel, lazy_gettext
-import logging
+from flask_babel import Babel
+from flask_wtf.csrf import CSRFProtect
+from config import Config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
 babel = Babel()
-
-@login_manager.user_loader
-def load_user(user_id):
-    from .models import User
-    return User.query.get(int(user_id))
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///filescloud.db'
-    app.config['UPLOAD_FOLDER'] = 'uploads/'
-    app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB
-    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt', 'docx', 'xlsx'}
-    app.config['BABEL_DEFAULT_LOCALE'] = 'ru'
+    app.config.from_object(Config)
 
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)
-    babel.init_app(app)
+    babel.init_app(app, locale_selector=get_locale)
+    csrf.init_app(app)
 
-    # @babel.localeselector
-    # def get_locale():
-    #     return request.accept_languages.best_match(['ru', 'en'])
+    login_manager.login_view = 'main.login'
+    login_manager.login_message_category = 'danger'
+    login_manager.login_message = 'Please log in to access this page.'
 
-    if not app.debug:
-        logging.basicConfig(level=logging.INFO)
+    upload_path = Path(app.config['UPLOAD_FOLDER'])
+    upload_path.mkdir(exist_ok=True, parents=True)
 
-    from .routes import main as main_blueprint
+    from app.routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    if not app.debug:
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s [%(levelname)s] %(message)s',
+            handlers=[
+                logging.FileHandler('app.log'),
+                logging.StreamHandler()
+            ]
+        )
+
     return app
+
+def get_locale():
+    from flask import request, session
+    return request.args.get('lang') or session.get('lang') or 'ru'
+
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models import User
+    return User.query.get(int(user_id))

@@ -1,0 +1,78 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+venv/
+.env/
+env/
+pythonenv*
+
+# --- Databases ---
+*.db
+*.sqlite
+*.sql
+instance/
+
+# --- Uploads ---
+uploads/
+
+# --- Logs and local files ---
+*.log
+logs/
+*.pot
+*.csv
+*.dat
+*.pid
+*.gz
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+.DS_Store
+
+# --- Environment ---
+.env
+.env.local
+.env.*.local
+secrets.yml
+config.yml
+
+# --- Testing ---
+.coverage
+htmlcov/
+.pytest_cache/
+test-results/
+
+# --- Static/Cache ---
+staticfiles/
+*.css.map
+*.js.map
+.cache/
+
+# --- macOS ---
+._*
+.Spotlight-V100
+.Trashes
+
+# --- Windows ---
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# --- Editors ---
+*.komodoproject
+*.kdev4
+*.sublime-project
+*.sublime-workspace
+
+# --- Exceptions ---
+!.gitkeep
+!README.md
