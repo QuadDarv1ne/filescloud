@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Зарегистрироваться</h2>
+<form method="POST" action="{{ url_for('main.register') }}">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.username.label(class="form-label") }}
+        {{ form.username(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.confirm.label(class="form-label") }}
+        {{ form.confirm(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+{% endblock %}

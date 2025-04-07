@@ -1,0 +1,8 @@
+Flask
+Werkzeug
+flask_sqlalchemy
+flask_login
+flask_migrate
+flask_wtf
+python-dotenv
+flask_babel
