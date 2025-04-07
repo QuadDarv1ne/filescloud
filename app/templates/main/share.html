@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Общий доступ | {{ file.filename }} | FilesCloud{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-share me-2"></i>Общий доступ
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Информация о файле -->
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-file-earmark fs-1 me-4 text-muted"></i>
+                        <div>
+                            <h5 class="mb-1">{{ file.filename }}</h5>
+                            <div class="text-muted small">
+                                <span class="me-3">{{ file.size|filesizeformat }}</span>
+                                <span>Загружен: {{ file.uploaded_at|datetimeformat }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ссылка для доступа -->
+                    <div class="mb-4">
+                        <label class="form-label">Публичная ссылка:</label>
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="form-control" 
+                                   value="{{ share_url }}" 
+                                   id="shareLink"
+                                   readonly>
+                            <button class="btn btn-outline-secondary" 
+                                    onclick="copyToClipboard()"
+                                    type="button">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">Ссылка действительна до: {{ expiration|datetimeformat }}</div>
+                    </div>
+
+                    <!-- Дополнительные опции -->
+                    <div class="border-top pt-3">
+                        <h6 class="mb-3"><i class="bi bi-gear me-2"></i>Настройки доступа</h6>
+                        
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.expiration.label(class="form-label") }}
+                                    {{ form.expiration(class="form-select") }}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    {{ form.password.label(class="form-label") }}
+                                    {{ form.password(class="form-control", placeholder="Опционально") }}
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        {{ form.download_limit(class="form-check-input") }}
+                                        {{ form.download_limit.label(class="form-check-label") }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-save me-2"></i>Обновить настройки
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Назад
+                        </a>
+                        <a href="{{ url_for('main.download_file', filename=file.filename) }}" 
+                           class="btn btn-success">
+                            <i class="bi bi-download me-2"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard() {
+    const copyText = document.getElementById("shareLink");
+    copyText.select();
+    document.execCommand("copy");
+    const toast = new bootstrap.Toast(document.getElementById('copyToast'));
+    toast.show();
+}
+</script>
+
+<!-- Toast уведомление -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check2-circle me-2"></i>Ссылка скопирована
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                    data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

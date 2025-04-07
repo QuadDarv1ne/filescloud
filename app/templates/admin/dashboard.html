@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель управления | FilesCloud{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="my-4"><i class="bi bi-speedometer2 me-2"></i>Панель управления</h2>
+    
+    <!-- Статистика -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">
+                        <i class="bi bi-people me-2"></i>Пользователи
+                    </h5>
+                    <div class="display-4">{{ users_stats.total }}</div>
+                    <small class="text-muted">+{{ users_stats.last_week }} за неделю</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success">
+                        <i class="bi bi-file-earmark me-2"></i>Файлы
+                    </h5>
+                    <div class="display-4">{{ files_stats.total }}</div>
+                    <small class="text-muted">{{ files_stats.total_size|filesizeformat }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card shadow-sm border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-info">
+                        <i class="bi bi-activity me-2"></i>Активность
+                    </h5>
+                    <div class="display-4">{{ files_stats.last_24h }}</div>
+                    <small class="text-muted">Загрузок за 24ч</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Последние файлы -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Последние загрузки</h5>
+            <a href="{{ url_for('main.index') }}" class="btn btn-sm btn-outline-secondary">
+                Все файлы
+            </a>
+        </div>
+        
+        <div class="list-group list-group-flush">
+            {% for file in recent_files %}
+            <div class="list-group-item d-flex align-items-center">
+                <i class="bi bi-file-earmark me-3 fs-4 text-muted"></i>
+                <div class="flex-grow-1">
+                    <div class="fw-semibold">{{ file.owner.username }}</div>
+                    {{ file.filename|truncate(40) }}
+                </div>
+                <div class="text-muted small text-end">
+                    <div>{{ file.uploaded_at|datetimeformat }}</div>
+                    <div>{{ file.size|filesizeformat }}</div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-4 text-muted">
+                <i class="bi bi-cloud-arrow-up fs-1"></i>
+                <p class="mt-2">Нет recent активности</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Последние пользователи -->
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>Новые пользователи</h5>
+        </div>
+        
+        <div class="list-group list-group-flush">
+            {% for user in recent_users %}
+            <div class="list-group-item d-flex align-items-center">
+                <i class="bi bi-person-circle me-3 fs-4 text-muted"></i>
+                <div class="flex-grow-1">
+                    <div class="fw-semibold">{{ user.username }}</div>
+                    <div class="text-muted small">
+                        Зарегистрирован: {{ user.created_at|datetimeformat }}
+                    </div>
+                </div>
+                <div class="text-muted small">
+                    Последний вход: {% if user.last_login %}{{ user.last_login|datetimeformat }}{% else %}—{% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-4 text-muted">
+                <i class="bi bi-people fs-1"></i>
+                <p class="mt-2">Нет новых пользователей</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
