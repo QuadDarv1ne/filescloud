@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import logging
 from pathlib import Path
@@ -45,6 +46,27 @@ def create_app():
             ]
         )
 
+    # Добавление фильтров
+    @app.template_filter('datetimeformat')
+    def datetimeformat(value, format='%d.%m.%Y %H:%M'):
+        if value is None:
+            return ""
+        return value.strftime(format)
+    
+    @app.template_filter('filesizeformat')
+    def filesizeformat(value):
+        # Улучшенный форматировщик размеров файлов
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if abs(value) < 1024.0:
+                return f"{value:3.1f} {unit}"
+            value /= 1024.0
+        return f"{value:.1f} TB"
+    
+    @app.context_processor
+    def inject_now():
+        # Добавляет текущий год в футер
+        return {'now': datetime.utcnow()}
+    
     return app
 
 def get_locale():

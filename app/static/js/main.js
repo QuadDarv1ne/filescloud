@@ -100,3 +100,22 @@ document.querySelectorAll('form').forEach(form => {
         }
     }, false);
 });
+
+// Улучшенная обработка модальных окон
+document.addEventListener('DOMContentLoaded', () => {
+    // Инициализация тултипов
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    
+    // Обработка копирования ссылки
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const target = document.querySelector(this.dataset.target)
+            navigator.clipboard.writeText(target.value)
+            
+            // Показ уведомления
+            const toast = new bootstrap.Toast(document.getElementById('copyToast'))
+            toast.show()
+        })
+    })
+})

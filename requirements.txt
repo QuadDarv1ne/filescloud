@@ -7,3 +7,5 @@ flask_wtf
 python-dotenv
 flask_babel
 python-dateutil
+celery
+mimerender

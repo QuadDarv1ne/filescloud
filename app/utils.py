@@ -3,6 +3,8 @@ import uuid
 from flask import current_app
 from werkzeug.utils import secure_filename
 
+from app import db  # Добавить в начало файла
+
 def allowed_file(filename):
     allowed_extensions = current_app.config['ALLOWED_EXTENSIONS']
     return '.' in filename and \
